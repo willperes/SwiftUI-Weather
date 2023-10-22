@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isNight = false
-    
+
     let weatherList: [WeatherModel] = [
         WeatherModel(dayOfWeek: "TER", imageName: "cloud.sun.fill", temperature: 21),
         WeatherModel(dayOfWeek: "QUA", imageName: "cloud.bolt.rain.fill", temperature: 24),
@@ -17,10 +17,10 @@ struct ContentView: View {
         WeatherModel(dayOfWeek: "SEX", imageName: "cloud.sun.fill", temperature: 21),
         WeatherModel(dayOfWeek: "SÁB", imageName: "cloud.fill", temperature: 18),
     ]
-    
+
     var body: some View {
         ZStack {
-            BackgroundView(isNight: $isNight)
+            BackgroundView(isNight: isNight)
 
             VStack {
                 CityTextView(cityName: "Palhoça, SC")
@@ -61,7 +61,7 @@ struct WeatherDayView: View {
                 .foregroundColor(.white)
 
             Image(systemName: data.imageName)
-                .renderingMode(.original)
+                .symbolRenderingMode(.multicolor)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 40, height: 40)
@@ -74,20 +74,23 @@ struct WeatherDayView: View {
 }
 
 struct BackgroundView: View {
-    @Binding var isNight: Bool
+    var isNight: Bool
 
     var body: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [isNight ? .black : .blue, isNight ? .gray : .lightBlue]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        ).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/ .all/*@END_MENU_TOKEN@*/)
+//        LinearGradient(
+//            gradient: Gradient(colors: [isNight ? .black : .blue, isNight ? .gray : .lightBlue]),
+//            startPoint: .topLeading,
+//            endPoint: .bottomTrailing
+//        ).ignoresSafeArea(/*@START_MENU_TOKEN@*/ .all/*@END_MENU_TOKEN@*/)
+        ContainerRelativeShape()
+            .fill(isNight ? Color.black.gradient : Color.blue.gradient)
+            .ignoresSafeArea()
     }
 }
 
 struct CityTextView: View {
     var cityName: String
-    
+
     var body: some View {
         Text(cityName)
             .font(.system(size: 32, weight: .medium, design: .default))
@@ -99,11 +102,11 @@ struct CityTextView: View {
 struct MainWeatherStatusView: View {
     var imageName: String
     var temperature: Int
-    
+
     var body: some View {
         VStack(spacing: 10) {
             Image(systemName: imageName)
-                .renderingMode(.original)
+                .symbolRenderingMode(.multicolor)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 180, height: 180)
